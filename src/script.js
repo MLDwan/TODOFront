@@ -45,7 +45,7 @@ const updateValue = (event) => {
   valueInput = event.target.value;
 };
 
-render = () => {
+const render = () => {
   const content = document.getElementById("contentPage");
   while (content.firstChild) {
     content.removeChild(content.lastChild);
@@ -63,7 +63,7 @@ render = () => {
       edInput.value = allTasks[index].text;
       container.appendChild(edInput);
       const acceptButton = document.createElement("button");
-      acceptButton.onclick = function () {
+      acceptButton.onclick = () => {
         acceptFun(index);
       };
 
@@ -73,7 +73,7 @@ render = () => {
       acceptButton.appendChild(imageAccept);
 
       const cancelButton = document.createElement("button");
-      cancelButton.onclick = function () {
+      cancelButton.onclick = () => {
         cancelFun(index);
       };
 
@@ -85,7 +85,7 @@ render = () => {
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.checked = item.isCheck;
-      checkbox.onclick = function () {
+      checkbox.onclick = () => {
         onChangeCheckBox(item, index);
       };
 
@@ -101,7 +101,7 @@ render = () => {
 
       if (allTasks[index].isCheck === false) {
         const editBut = document.createElement("button");
-        editBut.onclick = function () {
+        editBut.onclick = () => {
           editeFun(index);
         };
 
@@ -125,15 +125,11 @@ render = () => {
   });
 };
 
-deleteFun = async (index) => {
+const deleteFun = async (index) => {
   const resp = await fetch(
     `http://localhost:8000/deleteTask?id=${allTasks[index].id}`,
     {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json;; charset=utf-8",
-        "Access-Control-Allow-Origin": "*",
-      },
     }
   );
 
@@ -143,13 +139,13 @@ deleteFun = async (index) => {
   render();
 };
 
-editeFun = (index) => {
+const editeFun = (index) => {
   allTasks[index].flag = 1;
 
   render();
 };
 
-onChangeCheckBox = async (item, index) => {
+const onChangeCheckBox = async (item, index) => {
   allTasks[index].isCheck = !allTasks[index].isCheck;
   const res = item;
   const resp = await fetch("http://localhost:8000/updateTask", {
@@ -164,14 +160,8 @@ onChangeCheckBox = async (item, index) => {
       id: allTasks[index].id,
     }),
   });
-
-  if (allTasks[index].isCheck === true) {
-    allTasks.splice([index], 1);
-    allTasks.push(res);
-  } else {
-    allTasks.splice([index], 1);
-    allTasks.unshift(res);
-  }
+  
+  //add function sort
 
   let result = await resp.json();
   allTasks = result.data;
@@ -179,7 +169,7 @@ onChangeCheckBox = async (item, index) => {
   render();
 };
 
-acceptFun = async (index) => {
+const acceptFun = async (index) => {
   allTasks[index].flag = 0;
   allTasks.text = valueInput;
   allTasks[index].text = valueInput;
@@ -191,7 +181,7 @@ acceptFun = async (index) => {
       "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({
-      text: valueInput,
+      text: allTasks[index].text,
       id: allTasks[index].id,
     }),
   });
@@ -201,14 +191,14 @@ acceptFun = async (index) => {
   render();
 };
 
-cancelFun = (index) => {
+const cancelFun = (index) => {
   allTasks[index].flag = 0;
   localStorage.setItem("tasks", JSON.stringify(allTasks));
 
   render();
 };
 
-allRemove = () => {
+const deleteAll = () => {
   allTasks.splice(0, allTasks.length);
   localStorage.setItem("tasks", JSON.stringify(allTasks));
 
