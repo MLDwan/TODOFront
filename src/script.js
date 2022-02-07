@@ -1,9 +1,9 @@
 let allTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let valueInput = "";
 let input = null;
-let flag = 0
+let flag = 0;
 
-window.onload = async function init(){
+window.onload = async () => {
   input = document.getElementById("add-task");
   input.addEventListener("change", updateValue);
   const resp = await fetch("http://localhost:8000/allTasks", {
@@ -36,7 +36,7 @@ onClickButton = async() => {
 
   let result = await resp.json();
   allTasks = result.data;
-  localStorage.setItem('tasks', JSON.stringify(allTasks))
+  localStorage.setItem('tasks', JSON.stringify(allTasks));
   valueInput = "";
   input.value = "";
 
@@ -61,28 +61,28 @@ render = () => {
 		if(allTasks[index].flag === 1) {
 			const edInput = document.createElement("input");
       edInput.addEventListener("change", updateValue);
-			edInput.type = 'text'
-      edInput.value = allTasks[index].text
+			edInput.type = 'text';
+      edInput.value = allTasks[index].text;
 			container.appendChild(edInput);
-			const acceBut = document.createElement("button");
-			acceBut.onclick = function () {
+			const acceptButton = document.createElement("button");
+			acceptButton.onclick = function () {
 			  acceptFun(index);
 			};
 
-      container.appendChild(acceBut);
-      const imageAccep = document.createElement("img");
-      imageAccep.src = "img/accept.svg";
-      acceBut.appendChild(imageAccep);
+      container.appendChild(acceptButton);
+      const imageAccept = document.createElement("img");
+      imageAccept.src = "img/accept.svg";
+      acceptButton.appendChild(imageAccept);
 			
-			const cancBut = document.createElement("button");
-			cancBut.onclick = function () {
+			const cancelButton = document.createElement("button");
+			cancelButton.onclick = function () {
 				cancelFun(index);
 			};
 
-      container.appendChild(cancBut);
-      const imageCanc = document.createElement("img");
-      imageCanc.src = "img/cancel.svg";
-      cancBut.appendChild(imageCanc);
+      container.appendChild(cancelButton);
+      const imageCancel = document.createElement("img");
+      imageCancel.src = "img/cancel.svg";
+      cancelButton.appendChild(imageCancel);
 		} else {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
@@ -97,34 +97,35 @@ render = () => {
         text.className = item.isCheck ? "text-task done-text" : "text-task";
         container.className = item.isCheck ? "task-container-done" : "task-container"
         container.appendChild(text);
-        const delBut = document.createElement("button");
+        const deleteButton = document.createElement("button");
 
         if(allTasks[index].isCheck === false) {  
           const editBut = document.createElement("button");
           editBut.onclick = function () {
             editeFun(index);
           };
+
           container.appendChild(editBut);
           const imageEdit = document.createElement("img");
           imageEdit.src = "img/editor.svg";
           editBut.appendChild(imageEdit);
 	      };
 
-        delBut.onclick = () => {
-          delFun(index);
+        deleteButton.onclick = () => {
+          deleteFun(index);
         };
 
-        container.appendChild(delBut);
+        container.appendChild(deleteButton);
         const imageRemove = document.createElement("img");
         imageRemove.src = "img/remove.svg";
-        delBut.appendChild(imageRemove);  
+        deleteButton.appendChild(imageRemove);  
       };
 
     content.appendChild(container);
   });
 };
 
-delFun = async (index) => {
+deleteFun = async (index) => {
   const resp = await fetch(`http://localhost:8000/deleteTask?id=${allTasks[index].id}`, {
     method: 'DELETE',
     headers: {
