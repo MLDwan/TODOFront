@@ -57,25 +57,20 @@ const render = () => {
     container.className = "task-container";
 
     if (allTasks[index].flag === 1) {
-      const edInput = document.createElement("input");
-      edInput.addEventListener("change", updateValue);
-      edInput.type = "text";
-      edInput.value = allTasks[index].text;
-      container.appendChild(edInput);
+      const editInput = document.createElement("input");
+      editInput.addEventListener("change", updateValue);
+      editInput.type = "text";
+      editInput.value = allTasks[index].text;
+      container.appendChild(editInput);
       const acceptButton = document.createElement("button");
-      acceptButton.onclick = () => {
-        acceptFun(index);
-      };
+      acceptButton.onclick = () => acceptFun(index);
 
       container.appendChild(acceptButton);
       const imageAccept = document.createElement("img");
       imageAccept.src = "img/accept.svg";
       acceptButton.appendChild(imageAccept);
-
       const cancelButton = document.createElement("button");
-      cancelButton.onclick = () => {
-        cancelFun(index);
-      };
+      cancelButton.onclick = () => cancelFun(index);
 
       container.appendChild(cancelButton);
       const imageCancel = document.createElement("img");
@@ -85,9 +80,7 @@ const render = () => {
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.checked = item.isCheck;
-      checkbox.onclick = () => {
-        onChangeCheckBox(item, index);
-      };
+      checkbox.onclick = () => onChangeCheckBox(item, index);
 
       container.appendChild(checkbox);
       const text = document.createElement("p");
@@ -98,22 +91,17 @@ const render = () => {
         : "task-container";
       container.appendChild(text);
       const deleteButton = document.createElement("button");
+      deleteButton.onclick = () => deleteFun(index);
 
       if (allTasks[index].isCheck === false) {
-        const editBut = document.createElement("button");
-        editBut.onclick = () => {
-          editeFun(index);
-        };
+        const editButton = document.createElement("button");
+        editButton.onclick = () => editeFun(index);
 
-        container.appendChild(editBut);
+        container.appendChild(editButton);
         const imageEdit = document.createElement("img");
         imageEdit.src = "img/editor.svg";
-        editBut.appendChild(imageEdit);
+        editButton.appendChild(imageEdit);
       }
-
-      deleteButton.onclick = () => {
-        deleteFun(index);
-      };
 
       container.appendChild(deleteButton);
       const imageRemove = document.createElement("img");
@@ -130,9 +118,8 @@ const deleteFun = async (index) => {
     `http://localhost:8000/deleteTask?id=${allTasks[index].id}`,
     {
       method: "DELETE",
-    }
-  );
-
+    });
+    
   let result = await resp.json();
   allTasks = result.data;
 
@@ -147,7 +134,6 @@ const editeFun = (index) => {
 
 const onChangeCheckBox = async (item, index) => {
   allTasks[index].isCheck = !allTasks[index].isCheck;
-  const res = item;
   const resp = await fetch("http://localhost:8000/updateTask", {
     method: "PATCH",
     headers: {
@@ -155,18 +141,18 @@ const onChangeCheckBox = async (item, index) => {
       "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({
-      text: allTasks[index].text,
+      text: allTasks.text,
       isCheck: allTasks[index].isCheck,
       id: allTasks[index].id,
     }),
   });
-  
-  //add function sort
 
   let result = await resp.json();
+  result.data.sort((a, b) => 
+  (b.isCheck === false) - (a.isCheck === false))
   allTasks = result.data;
 
-  render();
+  render();   
 };
 
 const acceptFun = async (index) => {
@@ -181,7 +167,7 @@ const acceptFun = async (index) => {
       "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({
-      text: allTasks[index].text,
+      text: allTasks.text,
       id: allTasks[index].id,
     }),
   });
@@ -192,15 +178,18 @@ const acceptFun = async (index) => {
 };
 
 const cancelFun = (index) => {
-  allTasks[index].flag = 0;
-  localStorage.setItem("tasks", JSON.stringify(allTasks));
+  allTasks[index].flag = -1;
 
   render();
 };
 
-const deleteAll = () => {
-  allTasks.splice(0, allTasks.length);
-  localStorage.setItem("tasks", JSON.stringify(allTasks));
+const allRemove = async() => {
+  const resp = await fetch(`http://localhost:8000/deleteTask?id=${allTasks[index].id}`, {
+    method: "DELETE",
+  });
+
+  let result = await resp.json();
+  allTasks = result.data;
 
   render();
 };
