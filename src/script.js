@@ -16,7 +16,6 @@ window.onload = async () => {
 };
 
 const onClickButton = async () => {
-
   allTasks.unshift({
     text: valueInput,
     isCheck: false,
@@ -85,35 +84,32 @@ const render = () => {
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.checked = item.isCheck;
-      checkbox.onclick = () =>
-        onChangeCheckBox(textIndex, isCheckIndex, idIndex);
+      checkbox.onclick = () => onChangeCheckBox(textIndex, isCheckIndex, idIndex);
 
       container.appendChild(checkbox);
       const text = document.createElement("p");
       text.innerText = item.text;
       text.className = item.isCheck ? "text-task done-text" : "text-task";
-      container.className = item.isCheck
-        ? "task-container-done"
-        : "task-container";
+      container.className = item.isCheck ? "task-container-done" : "task-container";
       container.appendChild(text);
       const deleteButton = document.createElement("button");
-      deleteButton.onclick = () => deleteFun(idIndex);
-
+      
       if (allTasks[index].isCheck === false) {
         const editButton = document.createElement("button");
         editButton.onclick = () => editeFun(index);
-
         container.appendChild(editButton);
+        
         const imageEdit = document.createElement("img");
         imageEdit.src = "img/editor.svg";
         editButton.appendChild(imageEdit);
-      }
+      };
 
+      deleteButton.onclick = () => deleteFun(idIndex);
       container.appendChild(deleteButton);
       const imageRemove = document.createElement("img");
       imageRemove.src = "img/remove.svg";
       deleteButton.appendChild(imageRemove);
-    }
+    };
 
     content.appendChild(container);
   });
