@@ -1,6 +1,7 @@
 let valueInput = "";
 let input = null;
 let flag = 0;
+let allTasks = [];
 
 window.onload = async () => {
   input = document.getElementById("add-task");
@@ -15,6 +16,7 @@ window.onload = async () => {
 };
 
 const onClickButton = async () => {
+
   allTasks.unshift({
     text: valueInput,
     isCheck: false,
@@ -37,7 +39,7 @@ const onClickButton = async () => {
   allTasks = result.data;
   valueInput = "";
   input.value = "";
-
+  
   render();
 };
 
@@ -47,15 +49,18 @@ const updateValue = (event) => {
 
 const render = () => {
   const content = document.getElementById("contentPage");
+  allTasks.sort((a, b) => (b.isCheck === false) - (a.isCheck === false));
   while (content.firstChild) {
     content.removeChild(content.lastChild);
   }
 
   allTasks.map((item, index) => {
+    let textIndex = allTasks[index].text;
+    let idIndex = allTasks[index].id;
+    let isCheckIndex = allTasks[index].isCheck;
     const container = document.createElement("div");
     container.id = `task-${index}`;
     container.className = "task-container";
-
     if (allTasks[index].flag === 1) {
       const editInput = document.createElement("input");
       editInput.addEventListener("change", updateValue);
@@ -63,7 +68,7 @@ const render = () => {
       editInput.value = allTasks[index].text;
       container.appendChild(editInput);
       const acceptButton = document.createElement("button");
-      acceptButton.onclick = () => acceptFun(index);
+      acceptButton.onclick = () => acceptFun(textIndex, idIndex);
 
       container.appendChild(acceptButton);
       const imageAccept = document.createElement("img");
@@ -80,7 +85,8 @@ const render = () => {
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.checked = item.isCheck;
-      checkbox.onclick = () => onChangeCheckBox(item, index);
+      checkbox.onclick = () =>
+        onChangeCheckBox(textIndex, isCheckIndex, idIndex);
 
       container.appendChild(checkbox);
       const text = document.createElement("p");
@@ -91,7 +97,7 @@ const render = () => {
         : "task-container";
       container.appendChild(text);
       const deleteButton = document.createElement("button");
-      deleteButton.onclick = () => deleteFun(index);
+      deleteButton.onclick = () => deleteFun(idIndex);
 
       if (allTasks[index].isCheck === false) {
         const editButton = document.createElement("button");
@@ -113,13 +119,11 @@ const render = () => {
   });
 };
 
-const deleteFun = async (index) => {
-  const resp = await fetch(
-    `http://localhost:8000/deleteTask?id=${allTasks[index].id}`,
-    {
-      method: "DELETE",
-    });
-    
+const deleteFun = async (idIndex) => {
+  const resp = await fetch(`http://localhost:8000/deleteTask?id=${idIndex}`, {
+    method: "DELETE",
+  });
+
   let result = await resp.json();
   allTasks = result.data;
 
@@ -132,8 +136,8 @@ const editeFun = (index) => {
   render();
 };
 
-const onChangeCheckBox = async (item, index) => {
-  allTasks[index].isCheck = !allTasks[index].isCheck;
+const onChangeCheckBox = async (textIndex, isCheckIndex, idIndex) => {
+  isCheckIndex = !isCheckIndex;
   const resp = await fetch("http://localhost:8000/updateTask", {
     method: "PATCH",
     headers: {
@@ -141,25 +145,19 @@ const onChangeCheckBox = async (item, index) => {
       "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({
-      text: allTasks.text,
-      isCheck: allTasks[index].isCheck,
-      id: allTasks[index].id,
+      text: textIndex,
+      isCheck: isCheckIndex,
+      id: idIndex,
     }),
   });
 
   let result = await resp.json();
-  result.data.sort((a, b) => 
-  (b.isCheck === false) - (a.isCheck === false))
   allTasks = result.data;
 
-  render();   
+  render();
 };
-
-const acceptFun = async (index) => {
-  allTasks[index].flag = 0;
-  allTasks.text = valueInput;
-  allTasks[index].text = valueInput;
-
+const acceptFun = async (textIndex, idIndex) => {
+  textIndex = valueInput;
   const resp = await fetch("http://localhost:8000/updateTask", {
     method: "PATCH",
     headers: {
@@ -167,8 +165,8 @@ const acceptFun = async (index) => {
       "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({
-      text: allTasks.text,
-      id: allTasks[index].id,
+      text: textIndex,
+      id: idIndex,
     }),
   });
   let result = await resp.json();
@@ -179,17 +177,6 @@ const acceptFun = async (index) => {
 
 const cancelFun = (index) => {
   allTasks[index].flag = -1;
-
-  render();
-};
-
-const allRemove = async() => {
-  const resp = await fetch(`http://localhost:8000/deleteTask?id=${allTasks[index].id}`, {
-    method: "DELETE",
-  });
-
-  let result = await resp.json();
-  allTasks = result.data;
 
   render();
 };
