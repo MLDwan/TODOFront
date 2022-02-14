@@ -87,8 +87,8 @@ p {
 }
 
 div#contentPage {
-  display: flex; 
-  width: 100%; 
+  display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -101,7 +101,7 @@ div#contentPage {
     justify-content: space-between;
     padding: 10px;
   }
-  
+
   .task-container-done {
     padding: 10px;
     width: 40%;
@@ -109,9 +109,9 @@ div#contentPage {
   }
 
   .text-task {
-      font-size: 20px;
-      text-align: center;
-      overflow-wrap: anywhere;
+    font-size: 20px;
+    text-align: center;
+    overflow-wrap: anywhere;
   }
 
   .task-container-done button {
@@ -141,7 +141,7 @@ div#contentPage {
   .task-container {
     width: 80%;
   }
-  
+
   .task-container-done {
     width: 80%;
   }
