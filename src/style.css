@@ -109,9 +109,9 @@ div#contentPage {
   }
 
   .text-task {
-    font-size: 20px;
-    text-align: center;
-    overflow-wrap: anywhere;
+  	font-size: 20px;
+  	text-align: center;
+  	overflow-wrap: anywhere;
   }
 
   .task-container-done button {
