@@ -151,23 +151,27 @@ const onChangeCheckBox = async (textIndex, isCheckIndex, idIndex) => {
 
   render();
 };
-const acceptFun = async (textIndex, idIndex) => {
-  textIndex = valueInput;
-  const resp = await fetch("http://localhost:8000/updateTask", {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Access-Control-Allow-Origin": "*",
-    },
-    body: JSON.stringify({
-      text: textIndex,
-      id: idIndex,
-    }),
-  });
-  let result = await resp.json();
-  allTasks = result.data;
-
-  render();
+const acceptFun = async (textIndex, idIndex) => { 
+  if(valueInput.trim() !== '') {
+    textIndex = valueInput;
+    const resp = await fetch("http://localhost:8000/updateTask", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        text: textIndex,
+        id: idIndex,
+      }),
+    });
+    let result = await resp.json();
+    allTasks = result.data;
+  } else {
+    alert('Input text');
+    allTasks[index].flag = -1;
+  } 
+    render();
 };
 
 const cancelFun = (index) => {

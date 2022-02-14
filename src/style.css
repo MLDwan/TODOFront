@@ -5,29 +5,37 @@ body {
   align-items: center;
 }
 
-#content-page {
+div#content-page {
   display: flex;
   justify-content: center;
-  border: 2px solid rgb(32, 29, 185);
-  border-top: none;
+  border: 2px solid rgb(2, 2, 2);
+  background-color: blueviolet;
+  width: 100%;
+  
 }
 
 .task-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
+  width: 20%;
+  margin: 10px;
   border: 2px solid rgb(94, 89, 23);
   background-color: rgb(93, 214, 103);
 }
 
 .task-container-done {
   display: flex;
+  width: 20%;
+  margin: 10px;
   align-items: center;
   justify-content: center;
   margin-top: 10px;
   border: 2px solid rgb(94, 89, 23);
   background-color: rgb(238, 188, 23);
+}
+input[type="checkbox"] {
+  margin: 10px;
 }
 
 .task-container-done img {
@@ -57,13 +65,13 @@ body {
 }
 
 .text-task {
-  margin-left: 10px;
   font-size: 20px;
   color: black;
+  overflow-wrap: anywhere;
 }
 
 .done-text {
-  color: rgb(206, 127, 127);
+  color: rgb(214, 44, 44);
   text-decoration: line-through;
 }
 
@@ -76,4 +84,40 @@ body {
 p {
   text-decoration: none;
   padding: 0;
+}
+
+
+@media (max-width: 900px) {
+  .task-container {
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+  }
+  
+  .task-container-done {
+    padding: 10px;
+    flex-direction: column;
+  }
+  .text-task {
+      font-size: 20px;
+      text-align: center;
+      overflow-wrap: anywhere;
+  }
+  .task-container-done button {
+    margin-left: 0;
+  }
+  .task-container button {
+    margin-left: 0;
+    margin-bottom: 5px;
+  }
+  input[type="checkbox"] {
+    margin: 0;
+  }
+}
+
+@media (max-width: 250px) {
+  div#up {
+    display: flex;
+    flex-direction: column;
+  }
 }
