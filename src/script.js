@@ -171,6 +171,8 @@ const acceptFun = async (textIndex, idIndex) => {
     alert('Input text');
     allTasks[index].flag = -1;
   } 
+  valueInput = "";
+  input.value = "";
     render();
 };
 
