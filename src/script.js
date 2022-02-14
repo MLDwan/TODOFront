@@ -50,7 +50,6 @@ const render = () => {
   }
 
   allTasks.map((item, index) => {
-
     let textIndex = allTasks[index].text;
     let idIndex = allTasks[index]._id;
     let isCheckIndex = allTasks[index].isCheck;

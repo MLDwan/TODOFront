@@ -11,7 +11,6 @@ div#content-page {
   border: 2px solid rgb(2, 2, 2);
   background-color: blueviolet;
   width: 100%;
-  
 }
 
 .task-container {
@@ -126,9 +125,11 @@ p {
     display: flex;
     flex-direction: column;
   }
-  div#up button{
+
+  div#up button {
     margin: 5px;
   }
+
   .task-container {
     width: 80%;
   }
