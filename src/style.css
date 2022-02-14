@@ -88,10 +88,15 @@ p {
 
 div#contentPage {
   display: flex;
-  width: 100%;
+	margin: 10px;
+	overflow-wrap: normal;
+	overflow: scroll;
+  width: 75%;
+	height: 85%;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+	border: 2px solid black;
 }
 
 @media (max-width: 900px) {

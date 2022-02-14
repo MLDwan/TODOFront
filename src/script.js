@@ -28,12 +28,15 @@ const onClickButton = async () => {
       isCheck: false,
     }),
   });
+
+  if(valueInput !== '') {
+    let result = await resp.json();
+    allTasks = result.data;
+    } else alert('Text not found'); 
   
-  let result = await resp.json();
-  allTasks = result.data;
   valueInput = "";
   input.value = "";
-
+  
   render();
 };
 
@@ -43,7 +46,6 @@ const updateValue = (event) => {
 
 const render = () => {
   const content = document.getElementById("contentPage");
-  allTasks.reverse();
   allTasks.sort((a, b) => (b.isCheck === false) - (a.isCheck === false));
   while (content.firstChild) {
     content.removeChild(content.lastChild);
@@ -110,7 +112,6 @@ const render = () => {
       imageRemove.src = "img/remove.svg";
       deleteButton.appendChild(imageRemove);
     }
-
     content.appendChild(container);
   });
 };
@@ -166,13 +167,12 @@ const acceptFun = async (textIndex, idIndex) => {
     });
     let result = await resp.json();
     allTasks = result.data;
-  } else {
-    alert('Input text');
-    allTasks[index].flag = -1;
-  } 
+  } else alert('Text not found');
+
   valueInput = "";
   input.value = "";
-    render();
+
+  render();
 };
 
 const cancelFun = (index) => {
